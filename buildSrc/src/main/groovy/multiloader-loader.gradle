@@ -1,0 +1,57 @@
+// プラグインを設定する
+// 共通設定を継承する
+plugins {
+    id 'multiloader-common'
+}
+
+// ビルド設定をする
+// 共通コード用のConfigurationを設定する
+configurations {
+    commonJava{
+        canBeResolved = true
+    }
+    commonResources{
+        canBeResolved = true
+    }
+}
+
+// 依存関係を追加する
+dependencies {
+    compileOnly(project(':common')) {
+        capabilities {
+            requireCapability "$group:$mod_id"
+        }
+    }
+    commonJava project(path: ':common', configuration: 'commonJava')
+    commonResources project(path: ':common', configuration: 'commonResources')
+}
+
+// コンパイル設定をする
+// 共通Javaコードをコンパイル対象に含める
+tasks.named('compileJava', JavaCompile) {
+    dependsOn(configurations.commonJava)
+    source(configurations.commonJava)
+}
+
+// リソース処理を設定する
+// 共通リソースを取り込む
+processResources {
+    dependsOn(configurations.commonResources)
+    from(configurations.commonResources)
+}
+
+// Javadoc設定をする
+// 共通コードをJavadoc対象に含める
+tasks.named('javadoc', Javadoc).configure {
+    dependsOn(configurations.commonJava)
+    source(configurations.commonJava)
+}
+
+// ソースJar設定をする
+// 共通コードとリソースをソースJarに含める
+tasks.named('sourcesJar', Jar) {
+    dependsOn(configurations.commonJava)
+    from(configurations.commonJava)
+    dependsOn(configurations.commonResources)
+    from(configurations.commonResources)
+}

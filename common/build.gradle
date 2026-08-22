@@ -1,0 +1,70 @@
+// プラグインを設定する
+// 共通コード用のプラグインを適用する
+plugins {
+    id 'multiloader-common'
+}
+
+// 依存関係を追加する
+dependencies {
+
+    // Gsonをコンパイル時のみに含める
+    compileOnly 'com.google.code.gson:gson:2.10.1'
+    // Guavaをコンパイル時のみに含める
+    compileOnly 'com.google.guava:guava:31.1-jre'
+    // SLF4J APIをコンパイル時のみに含める
+    compileOnly 'org.slf4j:slf4j-api:1.7.36'
+
+    // Adventure APIを追加する
+    compileOnly "net.kyori:adventure-api:${adventure_version}"
+    compileOnly "net.kyori:adventure-text-serializer-gson:${adventure_version}"
+    compileOnly "net.kyori:adventure-text-serializer-legacy:${adventure_version}"
+
+    // スケジューリングライブラリを追加する
+    implementation 'org.quartz-scheduler:quartz:2.3.2'
+    // SFTP用ライブラリを追加する
+    implementation 'com.github.mwiede:jsch:0.2.24'
+    // Commons IOを追加する
+    implementation 'commons-io:commons-io:2.17.0'
+    // Commons Net（FTP用）を追加する
+    implementation 'commons-net:commons-net:3.11.0'
+    // Commons Lang3を追加する
+    implementation 'org.apache.commons:commons-lang3:3.18.0'
+    // キャッシュライブラリを追加する
+    implementation 'com.github.ben-manes.caffeine:caffeine:3.1.8'
+    // HTTPクライアントを追加する
+    implementation 'org.apache.httpcomponents:fluent-hc:4.5.14'
+    // Google APIクライアントを追加する
+    implementation 'com.google.api-client:google-api-client:2.7.2'
+    // Google OAuthクライアントを追加する
+    implementation 'com.google.oauth-client:google-oauth-client-jetty:1.36.0'
+    // Google Drive APIを追加する
+    implementation 'com.google.apis:google-api-services-drive:v3-rev20250329-2.0.0'
+
+    // アノテーション用ライブラリを追加する
+    compileOnly 'com.google.code.findbugs:jsr305:3.0.1'
+    compileOnly 'org.jetbrains:annotations:24.0.0'
+
+    // Lombokを設定する
+    compileOnly 'org.projectlombok:lombok:1.18.34'
+    annotationProcessor 'org.projectlombok:lombok:1.18.34'
+}
+
+// ビルド設定をする
+// 共通コード用のConfigurationを定義する
+configurations {
+    commonJava {
+        canBeResolved = false
+        canBeConsumed = true
+    }
+    commonResources {
+        canBeResolved = false
+        canBeConsumed = true
+    }
+}
+
+// アーティファクトを設定する
+// 共通のJavaとリソースを他プロジェクトへ公開する
+artifacts {
+    commonJava sourceSets.main.java.sourceDirectories.singleFile
+    commonResources sourceSets.main.resources.sourceDirectories.singleFile
+}

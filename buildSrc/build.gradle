@@ -1,0 +1,5 @@
+// プラグインを設定する
+// Groovy用Gradleプラグインを適用する
+plugins {
+    id 'groovy-gradle-plugin'
+}

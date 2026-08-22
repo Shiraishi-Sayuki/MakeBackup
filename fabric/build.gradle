@@ -1,0 +1,95 @@
+// プラグインを設定する
+// Fabric用のプラグインを適用する
+plugins {
+    id 'multiloader-loader'
+    id 'fabric-loom'
+}
+
+// 依存関係を追加する
+dependencies {
+    // Minecraft本体を指定する
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    // マッピングを設定する
+    mappings loom.layered {
+        officialMojangMappings()
+        parchment("org.parchmentmc.data:parchment-${parchment_minecraft}:${parchment_version}@zip")
+    }
+
+    // Fabric Loaderを追加する
+    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    // Fabric APIを追加する
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+    // 共通プロジェクトを参照する
+    implementation project(":common")
+
+    // ランタイムライブラリを定義する
+    def runtimeLibs = [
+            'org.quartz-scheduler:quartz:2.3.2',
+            'com.mchange:c3p0:0.9.5.4',
+            'com.zaxxer:HikariCP-java7:2.4.13',
+            'com.mchange:mchange-commons-java:0.2.15',
+            'com.github.mwiede:jsch:0.2.24',
+            'commons-io:commons-io:2.17.0',
+            'commons-net:commons-net:3.11.0',
+            'org.apache.commons:commons-lang3:3.18.0',
+            'com.github.ben-manes.caffeine:caffeine:3.1.8',
+            'org.apache.httpcomponents:fluent-hc:4.5.14',
+            'org.apache.httpcomponents:httpclient:4.5.14',
+            'org.apache.httpcomponents:httpcore:4.4.16',
+            'commons-codec:commons-codec:1.17.1',
+            'commons-logging:commons-logging:1.2',
+            'com.google.api-client:google-api-client:2.7.2',
+            'com.google.http-client:google-http-client:1.45.2',
+            'com.google.http-client:google-http-client-gson:1.45.2',
+            'com.google.oauth-client:google-oauth-client:1.36.0',
+            'com.google.oauth-client:google-oauth-client-java6:1.36.0',
+            'com.google.oauth-client:google-oauth-client-jetty:1.36.0',
+            'com.google.auth:google-auth-library-credentials:1.30.0',
+            'com.google.auth:google-auth-library-oauth2-http:1.30.0',
+            'com.google.apis:google-api-services-drive:v3-rev20250329-2.0.0',
+            'io.grpc:grpc-api:1.68.2',
+            'io.grpc:grpc-context:1.68.2',
+            'io.opencensus:opencensus-api:0.31.1',
+            'io.opencensus:opencensus-contrib-http-util:0.31.1',
+            'com.google.auto.value:auto-value-annotations:1.11.0',
+            'com.google.errorprone:error_prone_annotations:2.36.0',
+            'com.google.j2objc:j2objc-annotations:3.0.0',
+            'com.google.guava:failureaccess:1.0.2',
+            'org.checkerframework:checker-qual:3.43.0',
+            "net.kyori:examination-api:1.3.0",
+            "net.kyori:examination-string:1.3.0",
+            "net.kyori:adventure-api:${adventure_version}",
+            "net.kyori:adventure-key:${adventure_version}",
+            "net.kyori:adventure-text-serializer-gson:${adventure_version}",
+            "net.kyori:adventure-text-serializer-json:${adventure_version}",
+            "net.kyori:adventure-text-serializer-legacy:${adventure_version}"
+    ]
+    // ランタイムライブラリをまとめて追加・内包する
+    runtimeLibs.each { lib ->
+        implementation(lib)
+        include(lib)
+    }
+
+    // Lombokを設定する
+    compileOnly 'org.projectlombok:lombok:1.18.34'
+    annotationProcessor 'org.projectlombok:lombok:1.18.34'
+}
+
+// Loom設定をする
+// 実行環境を設定する
+loom {
+    runs {
+        client {
+            client()
+            setConfigName("Fabric Client")
+            ideConfigGenerated(true)
+            runDir("run")
+        }
+        server {
+            server()
+            setConfigName("Fabric Server")
+            ideConfigGenerated(true)
+            runDir("run")
+        }
+    }
+}
