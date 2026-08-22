@@ -9,7 +9,7 @@ import com.sayuki.makebackup.MakeBackup;
 import com.sayuki.makebackup.core.snapshot.Snapshot;
 import com.sayuki.makebackup.core.target.Target;
 import com.sayuki.makebackup.core.target.UserAuthTarget;
-import com.sayuki.makebackup.command.run.SnapshotCommand;
+import com.sayuki.makebackup.command.runner.SnapshotCommand;
 import com.sayuki.makebackup.command.drive.DriveLinkCommand;
 import com.sayuki.makebackup.command.browse.BrowseCommand;
 import com.sayuki.makebackup.command.manage.CopySnapshotCommand;
