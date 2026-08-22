@@ -17,18 +17,21 @@ import com.sayuki.makebackup.platform.ModCommandSender;
 import java.util.ArrayList;
 import java.util.List;
 
+// スナップショットコマンドクラス - バックアップを実行する
 public class SnapshotCommand extends SubCommand {
 
     private final String afterBackup;
     private List<Target> storages;
     private long delaySeconds = 0;
 
+    // コンストラクタ - 初期化する
     public SnapshotCommand(ModCommandSender sender, CommandArgs arguments, String afterBackup) {
         super(sender, arguments);
         this.afterBackup = afterBackup == null ? "NOTHING" : afterBackup.toUpperCase();
     }
 
     @Override
+    // チェックする - ストレージと権限と遅延を確認する
     public boolean check() {
         Object storageObj = arguments.get("storage");
         if (storageObj == null) {
@@ -102,6 +105,7 @@ public class SnapshotCommand extends SubCommand {
     }
 
     @Override
+    // 実行する - バックアップタスクを開始する
     public void run() {
         List<String> permissions = new ArrayList<>();
         for (Target storage : storages) {
